@@ -2,31 +2,33 @@
 namespace Squid\MySql\Impl\Command\Create;
 
 
-use Squid\MySql\Command\Create\IColumn;
+use Squid\MySql\Command\Create\ITableColumn;
 
 
-class Column implements IColumn
+class Column implements ITableColumn
 {
-	const PART_NAME			= 0;
-	const PART_TYPE			= 1;
-	const PART_ATTRIBUTES	= 2;
-	const PART_COLLATION	= 3;
-	const PART_NULL			= 4;
-	const PART_DEFAULT		= 5;
-	const PART_COMMENT		= 6;
+	const PART_NAME				= 0;
+	const PART_TYPE				= 1;
+	const PART_ATTRIBUTES		= 2;
+	const PART_COLLATION		= 3;
+	const PART_NULL				= 4;
+	const PART_DEFAULT			= 5;
+	const PART_AUTO_INCREMENT	= 6;
+	const PART_COMMENT			= 7;
 	
 	
 	/**
 	 * @var [string|null]
 	 */
 	private $parts = [
-		self::PART_NAME			=> null,
-		self::PART_TYPE			=> null,
-		self::PART_ATTRIBUTES	=> null,
-		self::PART_COLLATION	=> null,
-		self::PART_NULL			=> null,
-		self::PART_DEFAULT		=> null,
-		self::PART_COMMENT		=> null
+		self::PART_NAME				=> null,
+		self::PART_TYPE				=> null,
+		self::PART_ATTRIBUTES		=> null,
+		self::PART_COLLATION		=> null,
+		self::PART_NULL				=> 'NOT NULL',
+		self::PART_DEFAULT			=> null,
+		self::PART_AUTO_INCREMENT	=> null,
+		self::PART_COMMENT			=> null
 	];
 	
 	
@@ -129,7 +131,17 @@ class Column implements IColumn
 	 */
 	public function comment($comment)
 	{
-		$this->parts[self::PART_COMMENT] = $comment;
+		$this->parts[self::PART_COMMENT] = 'COMMENT "' . $comment . '"';
+		return $this;
+	}
+
+	/**
+	 * Mark this field as AUTO_INCREMENT
+	 * @return static
+	 */
+	public function autoIncrement()
+	{
+		$this->parts[self::PART_AUTO_INCREMENT] = 'AUTO_INCREMENT';
 		return $this;
 	}
 	
